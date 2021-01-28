@@ -36,8 +36,12 @@ class Roll(bot: ExtensibleBot): Extension(bot) {
                 } ?: throw ParseException("Please ensure you have picked a giveaway message. $notice")
 
                 val endtime = post[Posts.deadline].format(DateTimeFormatter.ofPattern("EEEE, LLLL d, Y"))
-                val users = message.getReactors("🎉".toReaction()).toList()
-                val picks = users.shuffled().filter { !it.isBot }.take(post[Posts.winners]).map { it.mention }
+                val users = message.getReactors("🎉".toReaction()).toList().filter { !it.isBot }
+                val picks = if (users.isNotEmpty()) {
+                    users.shuffled().take(post[Posts.winners]).map { it.mention }
+                } else {
+                    listOf("No", "Winners")
+                }
                 val desc = "Winners: ${picks.joinToString(" ")}\nHosted by: <@${post[Posts.host]}>"
 
                 message.edit {
