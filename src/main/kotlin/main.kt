@@ -28,9 +28,9 @@ suspend fun main() {
         client.addExtension( extenPrimeConstructor as (ExtensibleBot) -> Extension )
     }
 
-    // Register my cron jobs
-    giveawayUpdate(client).start()
-    giveawayDelete().start()
-
-    client.start()
+    client.start {
+        // Register my cron jobs
+        giveawayUpdate(client).start()
+        giveawayDelete().start()
+    }
 }

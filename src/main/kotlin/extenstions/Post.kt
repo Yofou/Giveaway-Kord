@@ -12,6 +12,9 @@ import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.channel.TextChannel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.toList
 import models.Posts
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -91,7 +94,12 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                 }
 
                 if ( arguments.channel?.type?.value == null || arguments.channel?.type?.value == 0 ) {
-                    message?.addReaction("🎉")
+                    message?.let {
+                        it.addReaction("🎉")
+                        it.pin()
+                        val pinsAdd = it.channel.messages.filter { msg -> msg.type.code == 6 }.toList()
+                        pinsAdd.firstOrNull()?.delete()
+                    }
 
                     transaction {
                         Posts.insert {

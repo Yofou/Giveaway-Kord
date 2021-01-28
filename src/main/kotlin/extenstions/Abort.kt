@@ -39,6 +39,7 @@ class Abort(bot: ExtensibleBot): Extension(bot) {
                     }
                 }.also {
                     it.deleteAllReactions()
+                    it.unpin()
                 }
 
                 transaction {

@@ -63,6 +63,8 @@ fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                                     }
                                 }
                             }
+
+                            message.unpin()
                         }
 
                         else -> {

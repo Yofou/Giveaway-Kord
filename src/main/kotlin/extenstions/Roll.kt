@@ -56,6 +56,8 @@ class Roll(bot: ExtensibleBot): Extension(bot) {
                             }
                         }
                     }
+                }.also {
+                    it.unpin()
                 }
 
                 message.channel.createMessage {
