@@ -40,7 +40,7 @@ fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                     when ( remaining < 0 ) {
                         true -> {
                             val users = message.getReactors( "🎉".toReaction() ).toList().filter { !it.isBot }
-                            val picks = if ( users.size > 0 ) {
+                            val picks = if (users.isNotEmpty()) {
                                 users.shuffled().take(post[Posts.winners]).map { it.mention }
                             } else {
                                 listOf("No", "Winners")
