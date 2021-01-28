@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-fun giveawayUpdate(client: ExtensibleBot) = sukejura {
+suspend fun giveawayUpdate(client: ExtensibleBot) = sukejura {
     schedule {
         minutes { (0..59 step 1).map { Minutes.M(it) } }
 

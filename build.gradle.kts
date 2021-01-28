@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.4.0-SNAPSHOT")
+    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.4.0-20210128.154200-43")
     implementation("org.slf4j:slf4j-simple:1.7.30")
     val exposedVersion = "0.28.1"
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
