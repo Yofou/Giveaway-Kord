@@ -29,12 +29,12 @@ suspend fun main() {
         }
     }
 
-    // Start my cron jobs
-    giveawayUpdate(client)
-    giveawayDelete()
-
     Database.connect("jdbc:sqlite:${env["db_uri"]}", "org.sqlite.JDBC")
     transaction { SchemaUtils.create(Posts) }
+
+    // Start my cron jobs
+    giveawayUpdate(client).start()
+    giveawayDelete().start()
 
     client.start()
 }
