@@ -51,9 +51,12 @@ class Roll(bot: ExtensibleBot): Extension(bot) {
                         }
 
                         embed {
-                            color = Color(127, 179, 213)
-                            title = post[Posts.title]
-                            description = desc
+                            color = Color(144, 238, 144)
+                            description = """
+                                Title: `${post[Posts.title]}`
+                                $desc
+                                Finished at: `${endtime}`
+                            """.trimIndent()
 
                             footer {
                                 text = "${post[Posts.winners]} Winners | Ended at • $endtime"
