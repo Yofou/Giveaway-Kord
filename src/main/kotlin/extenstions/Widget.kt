@@ -1,5 +1,8 @@
 package extenstions
 
+import arguments.WidgetMessageEdit
+import arguments.WidgetMessagePost
+import arguments.WidgetRoles
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.kord.common.entity.Snowflake
@@ -17,15 +20,15 @@ class Widget(bot: ExtensibleBot): Extension(bot)  {
             group("roles") {
                 description = "group of commands to control the member roles to keep track of"
 
-                subCommand {
+                subCommand(::WidgetRoles) {
                     name = "add"
                     description = "adds a role to the widet list"
                     action {
-                        println("Roles add")
+
                     }
                 }
 
-                subCommand {
+                subCommand(::WidgetRoles) {
                     name = "remove"
                     description = "removes a role to the widget list"
                     action {
@@ -43,10 +46,9 @@ class Widget(bot: ExtensibleBot): Extension(bot)  {
             }
 
             group("message") {
-
                 description = "group of commands that control the widget messages"
 
-                subCommand {
+                subCommand(::WidgetMessagePost) {
                     name = "post"
                     description = "post's a new widget message"
                     action {
@@ -54,7 +56,7 @@ class Widget(bot: ExtensibleBot): Extension(bot)  {
                     }
                 }
 
-                subCommand {
+                subCommand(::WidgetMessageEdit) {
                     name = "edit"
                     description = "edit's a exists widget message"
                     action {
