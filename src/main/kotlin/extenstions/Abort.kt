@@ -21,7 +21,7 @@ class Abort(bot: ExtensibleBot): Extension(bot) {
     override suspend fun setup() {
         slashCommand(::GiveawayFinderArguments) {
             name = "abort"
-            description = "Get's"
+            description = "Cancels the giveaway post (WARNING you can not undo this change after the command has been executed)"
             guild = Snowflake("802200869755813958")
 
             action {
