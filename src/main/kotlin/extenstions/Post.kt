@@ -6,18 +6,17 @@ import com.kotlindiscord.kord.extensions.ParseException
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.utils.addReaction
 import com.kotlindiscord.kord.extensions.utils.toHuman
-import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.channel.TextChannel
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.toList
 import models.Posts
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
+import giveawayUtils.giveawayPost
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -58,31 +57,28 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                 }
 
                 var message: Message? = null
+                println(arguments.image)
                 val follow = followUp {
                     when (arguments.channel?.type?.value) {
-                        null -> embed {
-                            color = Color(127, 179, 213)
-                            title = arguments.title
-                            image = arguments.image
-                            description =
-                                "React with with 🎉 to enter!\nTime remaining $duration\nHosted by${host.mention}"
-                            footer {
-                                text = "${arguments.winners} Winners | Ends at • $endtime"
-                            }
-                        }
+                        null -> embed(giveawayPost(
+                            arguments.title,
+                            arguments.image,
+                            duration,
+                            host.mention,
+                            arguments.winners,
+                            endtime
+                        ))
 
                         0 -> {
                             val channel = arguments.channel as TextChannel
-                            message = channel.createEmbed {
-                                color = Color(127, 179, 213)
-                                title = arguments.title
-                                image = arguments.image
-                                description =
-                                    "React with with 🎉 to enter!\nTime remaining $duration\nHosted by${host.mention}"
-                                footer {
-                                    text = "${arguments.winners} Winners | Ends at • $endtime"
-                                }
-                            }
+                            message = channel.createEmbed(giveawayPost(
+                                arguments.title,
+                                arguments.image,
+                                duration,
+                                host.mention,
+                                arguments.winners,
+                                endtime
+                            ))
 
                             content = "Giveaway Embed Created 🙌"
                         }

@@ -5,7 +5,6 @@ import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.ParseException
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.utils.toReaction
-import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.createMessage
@@ -15,6 +14,7 @@ import models.Posts
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import giveawayUtils.giveawayRoll
 import java.time.format.DateTimeFormatter
 
 @KordPreview
@@ -50,18 +50,15 @@ class Roll(bot: ExtensibleBot): Extension(bot) {
                             it[rolled] = true
                         }
 
-                        embed {
-                            color = Color(144, 238, 144)
-                            description = """
-                                Title: `${post[Posts.title]}`
-                                $desc
-                                Finished at: `${endtime}`
-                            """.trimIndent()
-
-                            footer {
-                                text = "${post[Posts.winners]} Winners | Ended at • $endtime"
-                            }
-                        }
+                        embed(
+                            giveawayRoll(
+                                post[Posts.title],
+                                desc,
+                                endtime,
+                                post[Posts.image],
+                                post[Posts.winners]
+                            )
+                        )
                     }
                 }.also {
                     it.unpin()

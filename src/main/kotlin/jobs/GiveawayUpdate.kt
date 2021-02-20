@@ -3,7 +3,6 @@ package jobs
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.utils.toHuman
 import com.kotlindiscord.kord.extensions.utils.toReaction
-import dev.kord.common.Color
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.createMessage
 import dev.kord.core.behavior.edit
@@ -15,6 +14,8 @@ import models.Posts
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import giveawayUtils.giveawayPost
+import giveawayUtils.giveawayRoll
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -57,35 +58,29 @@ suspend fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                                     it[rolled] = true
                                 }
 
-                                embed {
-                                    color = Color(144, 238, 144)
-                                    description = """
-                                        Title: `${post[Posts.title]}`
-                                        $desc
-                                        Finished at: `${endtime}`
-                                    """.trimIndent()
-
-                                    image = post[Posts.image]
-                                    footer {
-                                        text = "${post[Posts.winners]} Winners | Ended at • $endtime"
-                                    }
-                                }
+                                embed(
+                                    giveawayRoll(
+                                        post[Posts.title],
+                                        desc,
+                                        endtime,
+                                        post[Posts.image],
+                                        post[Posts.winners]
+                                    )
+                                )
                             }
 
                             message.unpin()
                         }
 
                         else -> {
-                            embed {
-                                color = Color(127, 179, 213)
-                                title = post[Posts.title]
-                                image = post[Posts.image]
-                                description =
-                                    "React with with 🎉 to enter!\nTime remaining ${duration.toHuman()}\nHosted by <@${post[Posts.host]}>"
-                                footer {
-                                    text = "${post[Posts.winners]} Winners | Ends at • $endtime"
-                                }
-                            }
+                            giveawayPost(
+                                post[Posts.title],
+                                post[Posts.image],
+                                "${duration.toHuman()}",
+                                "<@${post[Posts.host]}>",
+                                post[Posts.winners],
+                                endtime
+                            )
                         }
                     }
                 }
