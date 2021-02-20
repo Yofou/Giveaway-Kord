@@ -63,6 +63,7 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                         null -> embed {
                             color = Color(127, 179, 213)
                             title = arguments.title
+                            image = arguments.image
                             description =
                                 "React with with 🎉 to enter!\nTime remaining $duration\nHosted by${host.mention}"
                             footer {
@@ -75,6 +76,7 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                             message = channel.createEmbed {
                                 color = Color(127, 179, 213)
                                 title = arguments.title
+                                image = arguments.image
                                 description =
                                     "React with with 🎉 to enter!\nTime remaining $duration\nHosted by${host.mention}"
                                 footer {
@@ -108,6 +110,7 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                             it[channelId] = message!!.channelId.asString
                             it[this.host] = host.id.asString
                             it[title] = arguments.title
+                            it[image] = arguments.image
                             it[this.deadline] = deadline
                             it[winners] = arguments.winners
                             it[createdAt] = LocalDateTime.now()

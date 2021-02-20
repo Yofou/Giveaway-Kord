@@ -9,6 +9,7 @@ object Posts: IntIdTable("Posts") {
     val channelId = varchar("channel_id", 20)
     val host = varchar("host", 20)
     val title = varchar("title", 2000)
+    val image = varchar("image", 2000).nullable()
     val deadline = datetime("deadline")
     val winners = integer("winners")
     val rolled = bool("rolled").default(false)
