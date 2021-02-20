@@ -65,6 +65,7 @@ suspend fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                                         Finished at: `${endtime}`
                                     """.trimIndent()
 
+                                    image = post[Posts.image]
                                     footer {
                                         text = "${post[Posts.winners]} Winners | Ended at • $endtime"
                                     }
@@ -78,6 +79,7 @@ suspend fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                             embed {
                                 color = Color(127, 179, 213)
                                 title = post[Posts.title]
+                                image = post[Posts.image]
                                 description =
                                     "React with with 🎉 to enter!\nTime remaining ${duration.toHuman()}\nHosted by <@${post[Posts.host]}>"
                                 footer {

@@ -1,6 +1,5 @@
 import com.kotlindiscord.kord.extensions.ExtensibleBot
 import com.kotlindiscord.kord.extensions.extensions.Extension
-import dev.kord.core.event.gateway.ReadyEvent
 import dev.kord.gateway.Intents
 import dev.kord.gateway.PrivilegedIntent
 import io.github.cdimascio.dotenv.dotenv

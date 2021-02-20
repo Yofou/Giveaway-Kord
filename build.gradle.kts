@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.30"
 }
 
 group = "org.example"
@@ -26,6 +26,8 @@ dependencies {
     implementation("org.reflections:reflections:0.9.11")
     implementation("io.kesselring.sukejura:Sukejura:1.0.4")
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
+    implementation("io.ktor:ktor-client-core:1.4.3")
+    implementation("io.ktor:ktor-client-cio:1.4.3")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
