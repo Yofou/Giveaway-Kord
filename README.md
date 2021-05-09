@@ -3,7 +3,7 @@ Giveaway kord is a port from my node-js discord bot I made a while back when lea
 I thought in tradition to learn kord and kord-ex (a kotlin discord api wrapper and framework) I would port over
 the same bot with more or less features.
 
-#SETUP
+# SETUP
 Open the project in intellij, 
  1) make sure to install all dependencies from the `build.gradle.kts`
  2) create the resources folder under `src/main/` with a `.env file` and `.db file`
