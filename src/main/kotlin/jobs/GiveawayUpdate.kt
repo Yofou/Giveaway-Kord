@@ -73,13 +73,15 @@ suspend fun giveawayUpdate(client: ExtensibleBot) = sukejura {
                         }
 
                         else -> {
-                            giveawayPost(
-                                post[Posts.title],
-                                post[Posts.image],
-                                "${duration.toHuman()}",
-                                "<@${post[Posts.host]}>",
-                                post[Posts.winners],
-                                endtime
+                            embed(
+                                giveawayPost(
+                                    post[Posts.title],
+                                    post[Posts.image],
+                                    "${duration.toHuman()}",
+                                    "<@${post[Posts.host]}>",
+                                    post[Posts.winners],
+                                    endtime
+                                )
                             )
                         }
                     }

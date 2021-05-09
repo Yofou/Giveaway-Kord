@@ -1,8 +1,9 @@
 package extenstions
 
 import arguments.PostArguments
+import com.kotlindiscord.kord.extensions.CommandException
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.ParseException
+import com.kotlindiscord.kord.extensions.commands.slash.AutoAckType
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.utils.addReaction
 import com.kotlindiscord.kord.extensions.utils.toHuman
@@ -28,8 +29,8 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
         slashCommand(::PostArguments) {
             name = "post"
             description = "Posts a giveaway message in a channel, that people can vote on"
-            showSource = true
-            guild = Snowflake("802200869755813958")
+            guild = Snowflake("796293218941534238")
+            autoAck = AutoAckType.PUBLIC
 
             val durationHelpMessage = "__How to use durations__\n\n" +
                     "Durations are specified in pairs of amounts and units - for example, `12d` would be 12 days. " +
@@ -45,40 +46,45 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                     "**Years:** `y`, `year`, `years`"
 
             action {
-                val duration = arguments.time.toHuman()
-                    ?: throw ParseException("Ensure that you're duration value is larger than or equal to 1 second\n\n$durationHelpMessage")
+                guild ?: return@action
 
-                val host = arguments.host ?: this.member.asMember()
+                val duration = arguments.time.toHuman()
+                    ?: throw CommandException("Ensure that you're duration value is larger than or equal to 1 second\n\n$durationHelpMessage")
+
+                val host = arguments.host ?: this.user.asMember(guild!!.id)
                 val deadline = LocalDateTime.now().plusSeconds(arguments.time.seconds)
                 val endtime = deadline.format(DateTimeFormatter.ofPattern("EEEE, LLLL d, Y"))
 
-                guild.memberCount?.let {
-                    if (arguments.winners > it) throw ParseException("Winner argument can't be larger than the guild member count itself")
+                guild!!.memberCount?.let {
+                    if (arguments.winners > it) throw CommandException("Winner argument can't be larger than the guild member count itself")
                 }
 
                 var message: Message? = null
-                println(arguments.image)
-                val follow = followUp {
+                val follow = publicFollowUp {
                     when (arguments.channel?.type?.value) {
-                        null -> embed(giveawayPost(
-                            arguments.title,
-                            arguments.image,
-                            duration,
-                            host.mention,
-                            arguments.winners,
-                            endtime
-                        ))
-
-                        0 -> {
-                            val channel = arguments.channel as TextChannel
-                            message = channel.createEmbed(giveawayPost(
+                        null -> embed (
+                            giveawayPost(
                                 arguments.title,
                                 arguments.image,
                                 duration,
                                 host.mention,
                                 arguments.winners,
                                 endtime
-                            ))
+                            )
+                        )
+
+                        0 -> {
+                            val channel = arguments.channel as TextChannel
+                            message = channel.createEmbed(
+                                giveawayPost(
+                                    arguments.title,
+                                    arguments.image,
+                                    duration,
+                                    host.mention,
+                                    arguments.winners,
+                                    endtime
+                                )
+                            )
 
                             content = "Giveaway Embed Created 🙌"
                         }
@@ -102,7 +108,7 @@ class Post(bot: ExtensibleBot) : Extension(bot) {
                     transaction {
                         Posts.insert {
                             it[messageId] = message!!.id.asString
-                            it[guildId] = guild.id.asString
+                            it[guildId] = guild!!.id.asString
                             it[channelId] = message!!.channelId.asString
                             it[this.host] = host.id.asString
                             it[title] = arguments.title

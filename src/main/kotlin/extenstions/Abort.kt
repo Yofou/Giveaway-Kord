@@ -1,8 +1,9 @@
 package extenstions
 
 import arguments.*
+import com.kotlindiscord.kord.extensions.CommandException
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.ParseException
+import com.kotlindiscord.kord.extensions.commands.slash.AutoAckType
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import dev.kord.common.Color
 import dev.kord.common.annotation.KordPreview
@@ -22,12 +23,12 @@ class Abort(bot: ExtensibleBot): Extension(bot) {
         slashCommand(::GiveawayFinderArguments) {
             name = "abort"
             description = "Cancels the giveaway post (WARNING you can not undo this change after the command has been executed)"
-            guild = Snowflake("802200869755813958")
+            guild = Snowflake("796293218941534238")
 
             action {
                 val post = transaction {
                     Posts.select { Posts.messageId eq arguments.message.parsed.id.asString }.firstOrNull()
-                } ?: throw ParseException("Please ensure you have picked a giveaway message.")
+                } ?: throw CommandException("Please ensure you have picked a giveaway message.")
 
                 val now = LocalDateTime.now().format( DateTimeFormatter.ofPattern("EEEE, LLLL d, Y") )
                 arguments.message.parsed.edit {

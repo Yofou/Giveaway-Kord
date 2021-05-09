@@ -19,12 +19,12 @@ suspend fun main() {
 
     val client = ExtensibleBot( env["token"] ) {
         koinLogLevel = Level.DEBUG
-
-        commands {
-            slashCommands = true
-        }
-
+    
         intents { +Intents.all }
+
+        slashCommands {
+            enabled = true
+        }
 
         extensions {
             val reflections = Reflections("extenstions")
@@ -35,7 +35,7 @@ suspend fun main() {
         }
     }
 
-    Database.connect("jdbc:sqlite:${env["db_uri"]}", "org.sqlite.JDBC")
+    Database.connect("jdbc:sqlite:${env["db_uri"]}", "org.sqlite.JDBC" )
     transaction {
         SchemaUtils.create(Posts)
         SchemaUtils.create(WidgetRoles)

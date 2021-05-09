@@ -1,7 +1,7 @@
 package converters
 
+import com.kotlindiscord.kord.extensions.CommandException
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.ParseException
 import com.kotlindiscord.kord.extensions.commands.CommandContext
 import com.kotlindiscord.kord.extensions.commands.converters.ConverterToOptional
 import com.kotlindiscord.kord.extensions.commands.converters.OptionalConverter
@@ -42,8 +42,8 @@ class ImageUrlConverter: SingleConverter<String>() {
     override suspend fun parse(arg: String, context: CommandContext, bot: ExtensibleBot): Boolean {
         when (isImageUrl(arg)) {
             true -> this.parsed = arg
-            false -> throw ParseException("content response is not type of image from $arg\nor url is not valid (needs to end with .png for example)")
-            else -> throw ParseException("failed to find content type of url from $arg.")
+            false -> throw CommandException ("content response is not type of image from $arg\nor url is not valid (needs to end with .png for example)")
+            else -> throw CommandException ("failed to find content type of url from $arg.")
         }
 
         return true

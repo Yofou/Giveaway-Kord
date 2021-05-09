@@ -1,7 +1,8 @@
 package extenstions
 
+import com.kotlindiscord.kord.extensions.CommandException
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.ParseException
+import com.kotlindiscord.kord.extensions.commands.slash.AutoAckType
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.pagination.Paginator
 import com.kotlindiscord.kord.extensions.pagination.pages.Page
@@ -25,13 +26,13 @@ class Find( bot: ExtensibleBot ): Extension(bot) {
         slashCommand {
             name = "find"
             description = "Finds all the giveaway's in this guild"
-            guild = Snowflake("802200869755813958")
-            showSource = true
+            guild = Snowflake("796293218941534238")
 
             action {
-                val posts = transaction { Posts.select { (Posts.guildId eq guild.id.asString) and (Posts.rolled eq false) }.toList().chunked(2) }
+                guild ?: return@action
+                val posts = transaction { Posts.select { (Posts.guildId eq guild!!.id.asString) and (Posts.rolled eq false) }.toList().chunked(2) }
 
-                if ( posts.isEmpty() ) throw ParseException("There are no active giveaway currently in ${guild.name}")
+                if ( posts.isEmpty() ) throw CommandException("There are no active giveaway currently in ${guild!!.name}")
                 val pages = posts.map {
                     val description = it.map {
                         val url = "https://discordapp.com/channels/${it[Posts.guildId]}/${it[Posts.channelId]}/${it[Posts.messageId]}"
@@ -40,7 +41,7 @@ class Find( bot: ExtensibleBot ): Extension(bot) {
                         "$url\n```\n🔖 Title: ${it[Posts.title]}\n⏰ Time Remaining: ${duration.toHuman()}\n🏆 Number Of Winners: ${it[Posts.winners]}```"
                     }
                     Page(
-                       title = "${guild.name}, Giveaways",
+                       title = "${guild!!.name}, Giveaways",
                        description = description.joinToString("\n".subSequence(0, 1)) { it },
                        color = Color(127, 179, 213)
                     )

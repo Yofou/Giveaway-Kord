@@ -1,8 +1,8 @@
 package extenstions
 
 import arguments.GiveawayFinderArguments
+import com.kotlindiscord.kord.extensions.CommandException
 import com.kotlindiscord.kord.extensions.ExtensibleBot
-import com.kotlindiscord.kord.extensions.ParseException
 import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.utils.toReaction
 import dev.kord.common.annotation.KordPreview
@@ -27,13 +27,13 @@ class Roll(bot: ExtensibleBot): Extension(bot) {
             val notice = "(IMPORTANT after 6 months of it's initial roll, it can no longer be rolled anymore)"
             description =
                 "roll's a giveaway of it's prize before or after it's deadline"
-            guild = Snowflake("802200869755813958")
+            guild = Snowflake("796293218941534238")
 
             action {
                 val message = arguments.message.parsed
                 val post = transaction {
                     Posts.select { Posts.messageId eq message.id.asString }.firstOrNull()
-                } ?: throw ParseException("Please ensure you have picked a giveaway message. $notice")
+                } ?: throw CommandException("Please ensure you have picked a giveaway message. $notice")
 
                 val endtime = post[Posts.deadline].format(DateTimeFormatter.ofPattern("EEEE, LLLL d, Y"))
                 val users = message.getReactors("🎉".toReaction()).toList().filter { !it.isBot }
